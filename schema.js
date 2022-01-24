@@ -8,6 +8,13 @@ const pubsub = new PubSub();
 const TAGS_CHANGED_TOPIC = 'tags_changed'
 
 const typeDefs = [`
+
+  input Test {
+    seafood: String,
+    Time: String,
+    E: Int
+  }
+
   type Tag {
     id: Int
     label: String
@@ -24,8 +31,9 @@ const typeDefs = [`
     ping(message: String!): String
     tags(type: String!): [Tag]
     tagsPage(page: Int!, size: Int!): TagsPage
-    randomTag: Tag
+    randomTag(test: Test!): Tag
     lastTag: Tag
+    otherFields: Boolean!
   }
 
   type Mutation {
@@ -57,7 +65,7 @@ const resolvers = {
     tagsPage(root, { page, size }, context) {
       return Tags.getTagsPage(page, size);
     },
-    randomTag(root, args, context) {
+    randomTag(root, { seafood, Time, E }, context) {
       return Tags.getRandomTag();
     },
     lastTag(root, args, context) {
@@ -66,7 +74,6 @@ const resolvers = {
   },
   Mutation: {
     addTag: async (root, { type, label }, context) => {
-      console.log(`adding ${type} tag '${label}'`);
       const newTag = await Tags.addTag(type, label);
       pubsub.publish(TAGS_CHANGED_TOPIC, { tagAdded: newTag });
       return newTag;

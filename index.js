@@ -3,14 +3,13 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
-
 // Subs
 import { execute, subscribe } from 'graphql'
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 
 import schema from './schema';
 
-const PORT = 3020;
+const PORT = 3025;
 const SUBSCRIPTIONS_PATH = '/subscriptions';
 
 var app = express();
